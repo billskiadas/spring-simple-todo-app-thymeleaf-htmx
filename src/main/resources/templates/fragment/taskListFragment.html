@@ -1,0 +1,22 @@
+<ul th:fragment="taskList" id="taskList" class="divide-y divide-gray-200">
+    <li th:each="task : ${tasks}" class="flex items-center py-4">
+        <!-- Hidden original checkbox with htmx for toggling -->
+        <input
+                type="checkbox"
+                th:id="${task.id}"
+                th:checked="${task.completed}"
+                th:attr="hx-delete=@{/toggle/{taskId}(taskId=${task.id})},hx-target=@{#taskList}"
+                hx-swap="#taskList"
+                hx-trigger="change"
+                class="hidden"
+        >
+
+        <!-- Styled label that will act as our visual checkbox -->
+        <label th:for="${task.id}" class="w-5 h-5 mr-4 block border rounded border-gray-300 cursor-pointer hover:border-green-600">
+            <svg viewBox="0 0 24 24" class="hidden w-5 h-5 fill-current text-green-600" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 12l6 6L20 6"/>
+            </svg>
+        </label>
+        <span th:text="${task.description}" th:class="${task.completed} ? 'line-through text-gray-400' : ''"></span>
+    </li>
+</ul>
