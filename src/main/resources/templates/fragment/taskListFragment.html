@@ -5,7 +5,7 @@
                 type="checkbox"
                 th:id="${task.id}"
                 th:checked="${task.completed}"
-                th:attr="hx-delete=@{/toggle/{taskId}(taskId=${task.id})},hx-target=@{#taskList}"
+                th:attr="hx-delete=@{/{taskId}/toggle(taskId=${task.id})},hx-target=@{#taskList}"
                 hx-swap="#taskList"
                 hx-trigger="change"
                 class="hidden"

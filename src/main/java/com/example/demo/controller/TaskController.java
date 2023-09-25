@@ -1,31 +1,38 @@
 package com.example.demo.controller;
 
-import com.todo.app.htmx_demo.entity.Task;
-import com.todo.app.htmx_demo.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.example.demo.entity.Task;
+import com.example.demo.service.TaskService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
 
 @Controller
+@AllArgsConstructor
 public class TaskController {
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskService taskService;
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("tasks", taskRepository.findAll());
+        model.addAttribute("tasks", taskService.findAll());
         model.addAttribute("newTask", new Task());
         return "index";
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addTask(@ModelAttribute Task newTask) {
-        taskRepository.save(newTask);
-        return ResponseEntity.ok().build();
+    public String addTask(@ModelAttribute Task newTask, Model model) {
+        taskService.add(newTask);
+        model.addAttribute("tasks", taskService.findAll());
+        return "fragment/taskListFragment";
     }
+
+    @DeleteMapping(value = "/{taskId}/toggle")
+    public String toggleTaskCompletion(@PathVariable Long taskId, Model model) {
+        taskService.findBydId(taskId).ifPresent(taskService::completeToggled);
+        model.addAttribute("tasks", taskService.findAll());
+        return "fragment/taskListFragment";
+    }
+
 }

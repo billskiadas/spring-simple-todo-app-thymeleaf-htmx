@@ -1,7 +1,8 @@
-package com.todo.app.htmx_demo.repository;
+package com.example.demo.repository;
 
-import com.todo.app.htmx_demo.entity.Task;
+import com.example.demo.entity.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 

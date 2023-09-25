@@ -2,12 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Todo App</title>
+    <title>Todo Example</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.4.1"></script>
 </head>
-<body class="bg-gray-200 p-5">
+<body class="bg-gradient-to-r from-blue-200 to-green-300 p-10 appearance-none">
 
-    Hi mom!
+<div class="container w-full max-w-xl mx-auto bg-white p-10 rounded-xl shadow-xl">
+    <h1 class="mb-6 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">My Tasks</h1>
+
+    <!-- Add Task Form -->
+    <form id="add-task-form" th:action="@{/add}" method="post" hx-post="/add" hx-target="#taskList" hx-swap="outerHTML" th:object="${newTask}" class="flex mb-8">
+        <input id="add-task-input" th:field="*{description}" type="text" placeholder="What's next?" class="p-3 flex-grow rounded-l-lg border-t border-b border-l border-gray-300 focus:border-blue-500 focus:outline-none">
+        <button type="submit" class="p-3 bg-blue-600 text-sm text-white rounded-r-lg hover:bg-blue-700 transition duration-300">Add</button>
+    </form>
+
+    <div th:replace="fragment/taskListFragment :: taskList"></div>
+
+</div>
 </body>
+<style>
+    /* When the checkbox is checked, show the SVG icon inside the adjacent label */
+    input[type="checkbox"]:checked + label svg {
+        display: block;
+    }
+
+    /* Optional: When the checkbox is checked, add a background color to the label */
+    input[type="checkbox"]:checked + label {
+        background-color: #F0F9E8;  /* Light green background */
+        border-color: #34D399;     /* Green border */
+    }
+</style>
+<script>
+    htmx.on('#add-task-form', 'htmx:afterRequest',  () => {
+        document.getElementById('add-task-input').value = '';
+    });
+</script>
 </html>
